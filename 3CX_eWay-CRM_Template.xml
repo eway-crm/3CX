@@ -38,11 +38,35 @@
         <Variable Name="TelephoneNumber3" Path="Data.TelephoneNumber3">
           <Filter />
         </Variable>
+        <Variable Name="Email1Address" Path="Data.Email1Address">
+          <Filter />
+        </Variable>
+        <Variable Name="TelephoneNumber1" Path="Data.TelephoneNumber1">
+          <Filter />
+        </Variable>
+        <Variable Name="TelephoneNumber2" Path="Data.TelephoneNumber2">
+          <Filter />
+        </Variable>
+        <Variable Name="TelephoneNumber5" Path="Data.TelephoneNumber5">
+          <Filter />
+        </Variable>
+        <Variable Name="TelephoneNumber6" Path="Data.TelephoneNumber6">
+          <Filter />
+        </Variable>
+        <Variable Name="TelephoneNumber4" Path="Data.TelephoneNumber4">
+          <Filter />
+        </Variable>
       </Variables>
       <Outputs AllowEmpty="false">
         <Output Type="FirstName" Passes="0" Value="[FirstName]" />
         <Output Type="LastName" Passes="0" Value="[LastName]" />
         <Output Type="PhoneMobile" Passes="0" Value="[TelephoneNumber3]" />
+        <Output Type="Email" Passes="0" Value="[Email1Address]" />
+        <Output Type="PhoneBusiness" Passes="0" Value="[TelephoneNumber1]" />
+        <Output Type="PhoneHome" Passes="0" Value="[TelephoneNumber2]" />
+        <Output Type="PhoneBusiness2" Passes="0" Value="[TelephoneNumber5]" />
+        <Output Type="FaxBusiness" Passes="0" Value="[TelephoneNumber6]" />
+        <Output Type="PhoneOther" Passes="0" Value="[TelephoneNumber4]" />
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
@@ -60,11 +84,19 @@
         <Variable Name="MobilePhoneNumberNormalized" Path="Data.MobilePhoneNumberNormalized">
           <Filter />
         </Variable>
+        <Variable Name="Email1Address" Path="Data.Email1Address">
+          <Filter />
+        </Variable>
+        <Variable Name="BusinessPhoneNumber" Path="Data.BusinessPhoneNumber">
+          <Filter />
+        </Variable>
       </Variables>
       <Outputs AllowEmpty="false">
         <Output Type="FirstName" Passes="0" Value="[FirstName]" />
         <Output Type="LastName" Passes="0" Value="[LastName]" />
         <Output Type="PhoneMobile" Passes="0" Value="[MobilePhoneNumberNormalized]" />
+        <Output Type="Email" Passes="0" Value="[Email1Address]" />
+        <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
       </Outputs>
     </Scenario>
   </Scenarios>
