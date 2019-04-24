@@ -99,5 +99,31 @@
         <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
       </Outputs>
     </Scenario>
+    <Scenario Type="REST">
+      <Request Url="[URL]/WcfService/Service.svc/SearchCompanies" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;PhoneNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Rules>
+        <Rule Type="Any">Data</Rule>
+      </Rules>
+      <Variables>
+        <Variable Name="FileAs" Path="Data.FileAs">
+          <Filter />
+        </Variable>
+        <Variable Name="Phone" Path="Data.Phone">
+          <Filter />
+        </Variable>
+        <Variable Name="Mobile" Path="Data.Mobile">
+          <Filter />
+        </Variable>
+        <Variable Name="Email" Path="Data.Email">
+          <Filter />
+        </Variable>
+      </Variables>
+      <Outputs AllowEmpty="false">
+        <Output Type="CompanyName" Passes="0" Value="[FileAs]" />
+        <Output Type="PhoneBusiness" Passes="0" Value="[Phone]" />
+        <Output Type="PhoneMobile" Passes="0" Value="[Mobile]" />
+        <Output Type="Email" Passes="0" Value="[Email]" />
+      </Outputs>
+    </Scenario>
   </Scenarios>
 </Crm>
