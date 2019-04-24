@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<Crm xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Country="US" Name="eWayCRM" Version="1">
+  <Number Prefix="AsIs" MaxLength="256" />
+  <Connection MaxConcurrentRequests="2" />
+  <Parameters>
+    <Parameter Name="UserName" Type="String" Editor="String" Title="Username:" />
+    <Parameter Name="PasswordHash" Type="Password" Editor="String" Title="Password hash:" />
+    <Parameter Name="URL" Type="String" Editor="String" Title="URL:" />
+  </Parameters>
+  <Authentication Type="Scenario">
+    <Value>Login</Value>
+  </Authentication>
+  <Scenarios>
+    <Scenario Id="Login" Type="REST">
+      <Request Url="[URL]/WcfService/Service.svc/Login" Message="{ &quot;userName&quot;: ^^[UserName]^^, &quot;passwordHash&quot;: ^^[PasswordHash]^^, &quot;appVersion&quot;: &quot;CRM_Lookup_3CX_1.0&quot;, &quot;clientMachineIdentifier&quot;: &quot;0768601D-2E26-4275-946F-7D2D900B806E&quot; }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Rules>
+        <Rule Type="Any" Ethalon="">SessionId</Rule>
+      </Rules>
+      <Variables>
+        <Variable Name="SID" Path="SessionId">
+          <Filter />
+        </Variable>
+      </Variables>
+      <Outputs Next="" AllowEmpty="false" />
+    </Scenario>
+    <Scenario Id="" Type="REST">
+      <Request Url="[URL]/WcfService/Service.svc/SearchContacts" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber3Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Rules>
+        <Rule Type="Any">Data</Rule>
+      </Rules>
+      <Variables>
+        <Variable Name="FirstName" LookupValue="" Path="Data.FirstName">
+          <Filter />
+        </Variable>
+        <Variable Name="LastName" Path="Data.LastName">
+          <Filter />
+        </Variable>
+        <Variable Name="TelephoneNumber3" Path="Data.TelephoneNumber3">
+          <Filter />
+        </Variable>
+      </Variables>
+      <Outputs AllowEmpty="false">
+        <Output Type="FirstName" Passes="0" Value="[FirstName]" />
+        <Output Type="LastName" Passes="0" Value="[LastName]" />
+        <Output Type="PhoneMobile" Passes="0" Value="[TelephoneNumber3]" />
+      </Outputs>
+    </Scenario>
+    <Scenario Id="" Type="REST">
+      <Request Url="[URL]/WcfService/Service.svc/SearchUsers" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;MobilePhoneNumberNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Rules>
+        <Rule Type="Any">Data</Rule>
+      </Rules>
+      <Variables>
+        <Variable Name="FirstName" LookupValue="" Path="Data.FirstName">
+          <Filter />
+        </Variable>
+        <Variable Name="LastName" Path="Data.LastName">
+          <Filter />
+        </Variable>
+        <Variable Name="MobilePhoneNumberNormalized" Path="Data.MobilePhoneNumberNormalized">
+          <Filter />
+        </Variable>
+      </Variables>
+      <Outputs AllowEmpty="false">
+        <Output Type="FirstName" Passes="0" Value="[FirstName]" />
+        <Output Type="LastName" Passes="0" Value="[LastName]" />
+        <Output Type="PhoneMobile" Passes="0" Value="[MobilePhoneNumberNormalized]" />
+      </Outputs>
+    </Scenario>
+  </Scenarios>
+</Crm>

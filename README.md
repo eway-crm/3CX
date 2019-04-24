@@ -1,2 +1,2 @@
 # 3CX
-eWay-CRM 3CX Integration
+Template for [eWay-CRM](https://www.eway-crm.com/) server-side integration with 3CX.
