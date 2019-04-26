@@ -125,5 +125,31 @@
         <Output Type="Email" Passes="0" Value="[Email]" />
       </Outputs>
     </Scenario>
+    <Scenario Type="REST">
+      <Request Url="[URL]/WcfService/Service.svc/SearchLeads" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;PhoneNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Rules>
+        <Rule Type="Any">Data</Rule>
+      </Rules>
+      <Variables>
+        <Variable Name="ContactPerson" Path="Data.ContactPerson">
+          <Filter />
+        </Variable>
+        <Variable Name="Customer" Path="Data.Customer">
+          <Filter />
+        </Variable>
+        <Variable Name="Phone" Path="Data.Phone">
+          <Filter />
+        </Variable>
+        <Variable Name="Email" Path="Data.Email">
+          <Filter />
+        </Variable>
+      </Variables>
+      <Outputs AllowEmpty="false">
+        <Output Type="LastName" Passes="0" Value="[ContactPerson]" />
+        <Output Type="CompanyName" Passes="0" Value="[Customer]" />
+        <Output Type="PhoneMobile" Passes="0" Value="[Phone]" />
+        <Output Type="Email" Passes="0" Value="[Email]" />
+      </Outputs>
+    </Scenario>
   </Scenarios>
 </Crm>
