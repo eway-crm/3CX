@@ -299,66 +299,6 @@
         <Output Type="PhoneOther" Passes="0" Value="[TelephoneNumber4]" />
       </Outputs>
     </Scenario>
-    <Scenario Id="" Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchUsers" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;MobilePhoneNumberNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
-      <Rules>
-        <Rule Type="Any">Data</Rule>
-      </Rules>
-      <Variables>
-        <Variable Name="FirstName" LookupValue="" Path="Data.FirstName">
-          <Filter />
-        </Variable>
-        <Variable Name="LastName" Path="Data.LastName">
-          <Filter />
-        </Variable>
-        <Variable Name="MobilePhoneNumberNormalized" Path="Data.MobilePhoneNumberNormalized">
-          <Filter />
-        </Variable>
-        <Variable Name="Email1Address" Path="Data.Email1Address">
-          <Filter />
-        </Variable>
-        <Variable Name="BusinessPhoneNumber" Path="Data.BusinessPhoneNumber">
-          <Filter />
-        </Variable>
-      </Variables>
-      <Outputs AllowEmpty="false">
-        <Output Type="FirstName" Passes="0" Value="[FirstName]" />
-        <Output Type="LastName" Passes="0" Value="[LastName]" />
-        <Output Type="PhoneMobile" Passes="0" Value="[MobilePhoneNumberNormalized]" />
-        <Output Type="Email" Passes="0" Value="[Email1Address]" />
-        <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
-      </Outputs>
-    </Scenario>
-    <Scenario Id="" Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchUsers" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;BusinessPhoneNumberNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
-      <Rules>
-        <Rule Type="Any">Data</Rule>
-      </Rules>
-      <Variables>
-        <Variable Name="FirstName" LookupValue="" Path="Data.FirstName">
-          <Filter />
-        </Variable>
-        <Variable Name="LastName" Path="Data.LastName">
-          <Filter />
-        </Variable>
-        <Variable Name="MobilePhoneNumberNormalized" Path="Data.MobilePhoneNumberNormalized">
-          <Filter />
-        </Variable>
-        <Variable Name="Email1Address" Path="Data.Email1Address">
-          <Filter />
-        </Variable>
-        <Variable Name="BusinessPhoneNumber" Path="Data.BusinessPhoneNumber">
-          <Filter />
-        </Variable>
-      </Variables>
-      <Outputs AllowEmpty="false">
-        <Output Type="FirstName" Passes="0" Value="[FirstName]" />
-        <Output Type="LastName" Passes="0" Value="[LastName]" />
-        <Output Type="PhoneMobile" Passes="0" Value="[MobilePhoneNumberNormalized]" />
-        <Output Type="Email" Passes="0" Value="[Email1Address]" />
-        <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
-      </Outputs>
-    </Scenario>
     <Scenario Type="REST">
       <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchCompanies" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;PhoneNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
@@ -435,6 +375,66 @@
         <Output Type="CompanyName" Passes="0" Value="[Customer]" />
         <Output Type="PhoneMobile" Passes="0" Value="[Phone]" />
         <Output Type="Email" Passes="0" Value="[Email]" />
+      </Outputs>
+    </Scenario>
+    <Scenario Id="" Type="REST">
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchUsers" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;MobilePhoneNumberNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Rules>
+        <Rule Type="Any">Data</Rule>
+      </Rules>
+      <Variables>
+        <Variable Name="FirstName" LookupValue="" Path="Data.FirstName">
+          <Filter />
+        </Variable>
+        <Variable Name="LastName" Path="Data.LastName">
+          <Filter />
+        </Variable>
+        <Variable Name="MobilePhoneNumberNormalized" Path="Data.MobilePhoneNumberNormalized">
+          <Filter />
+        </Variable>
+        <Variable Name="Email1Address" Path="Data.Email1Address">
+          <Filter />
+        </Variable>
+        <Variable Name="BusinessPhoneNumber" Path="Data.BusinessPhoneNumber">
+          <Filter />
+        </Variable>
+      </Variables>
+      <Outputs AllowEmpty="false">
+        <Output Type="FirstName" Passes="0" Value="[FirstName]" />
+        <Output Type="LastName" Passes="0" Value="[LastName]" />
+        <Output Type="PhoneMobile" Passes="0" Value="[MobilePhoneNumberNormalized]" />
+        <Output Type="Email" Passes="0" Value="[Email1Address]" />
+        <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
+      </Outputs>
+    </Scenario>
+    <Scenario Id="" Type="REST">
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchUsers" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;BusinessPhoneNumberNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Rules>
+        <Rule Type="Any">Data</Rule>
+      </Rules>
+      <Variables>
+        <Variable Name="FirstName" LookupValue="" Path="Data.FirstName">
+          <Filter />
+        </Variable>
+        <Variable Name="LastName" Path="Data.LastName">
+          <Filter />
+        </Variable>
+        <Variable Name="MobilePhoneNumberNormalized" Path="Data.MobilePhoneNumberNormalized">
+          <Filter />
+        </Variable>
+        <Variable Name="Email1Address" Path="Data.Email1Address">
+          <Filter />
+        </Variable>
+        <Variable Name="BusinessPhoneNumber" Path="Data.BusinessPhoneNumber">
+          <Filter />
+        </Variable>
+      </Variables>
+      <Outputs AllowEmpty="false">
+        <Output Type="FirstName" Passes="0" Value="[FirstName]" />
+        <Output Type="LastName" Passes="0" Value="[LastName]" />
+        <Output Type="PhoneMobile" Passes="0" Value="[MobilePhoneNumberNormalized]" />
+        <Output Type="Email" Passes="0" Value="[Email1Address]" />
+        <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
       </Outputs>
     </Scenario>
   </Scenarios>
