@@ -5,8 +5,8 @@
   <Parameters>
     <Parameter Name="UserName" Type="String" Editor="String" Title="Username:" />
     <Parameter Name="PasswordHash" Type="Password" Editor="String" Title="Password hash:" />
-    <Parameter Name="URL" Type="String" Editor="String" Title="URL:" />
-    <Parameter Name="ReportCallEnabled" Type="Boolean" Editor="String" Title="Enable Call Journaling:" />
+    <Parameter Name="URL" Type="String" Editor="String" Title="Web Service Address:" />
+    <Parameter Name="ReportCallEnabled" Type="Boolean" Editor="String" Title="Enable Call Journaling" />
   </Parameters>
   <Authentication Type="Scenario">
     <Value>Login</Value>
@@ -483,7 +483,16 @@
       </Outputs>
     </Scenario>
     <Scenario Id="ReportCall" Type="REST">
-      <Request SkipIf="[ReportCallEnabled]!=True" Url="[URL]/WcfService/Service.svc/SaveJournal" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;Phone&quot;: ^^[Number]^^, &quot;FileAs&quot;: ^^[Subject]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[ReportCallEnabled]!=True" Url="[URL]/WcfService/Service.svc/SearchUsers" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;BusinessPhoneNumberNormalized&quot;: ^^[Agent]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Variables>
+        <Variable Name="UserGUID" Path="Data.ItemGUID">
+          <Filter />
+        </Variable>
+      </Variables>
+      <Outputs Next="CreateCall" AllowEmpty="false" />
+    </Scenario>
+    <Scenario Id="CreateCall" Type="REST">
+      <Request SkipIf="" Url="[URL]/WcfService/Service.svc/SaveJournal" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;Phone&quot;: ^^[Number]^^, &quot;FileAs&quot;: ^^[CallType] call^^, &quot;EventStart&quot;: ^^[[CallStartTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;EventEnd&quot;: ^^[[CallEndTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;OwnerGUID&quot;: ^^[UserGUID]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Variables />
       <Outputs AllowEmpty="false" />
     </Scenario>
