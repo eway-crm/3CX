@@ -71,7 +71,7 @@
         <Output Type="PhoneBusiness2" Passes="0" Value="[TelephoneNumber5]" />
         <Output Type="FaxBusiness" Passes="0" Value="[TelephoneNumber6]" />
         <Output Type="PhoneOther" Passes="0" Value="[TelephoneNumber4]" />
-        <Output Type="ContactUrl" Passes="0" Value="eway://Contacts/[ItemGUID]" />
+        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Contacts&id=[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
@@ -121,7 +121,7 @@
         <Output Type="PhoneBusiness2" Passes="0" Value="[TelephoneNumber5]" />
         <Output Type="FaxBusiness" Passes="0" Value="[TelephoneNumber6]" />
         <Output Type="PhoneOther" Passes="0" Value="[TelephoneNumber4]" />
-        <Output Type="ContactUrl" Passes="0" Value="eway://Contacts/[ItemGUID]" />
+        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Contacts&id=[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
@@ -171,7 +171,7 @@
         <Output Type="PhoneBusiness2" Passes="0" Value="[TelephoneNumber5]" />
         <Output Type="FaxBusiness" Passes="0" Value="[TelephoneNumber6]" />
         <Output Type="PhoneOther" Passes="0" Value="[TelephoneNumber4]" />
-        <Output Type="ContactUrl" Passes="0" Value="eway://Contacts/[ItemGUID]" />
+        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Contacts&id=[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
@@ -221,7 +221,7 @@
         <Output Type="PhoneBusiness2" Passes="0" Value="[TelephoneNumber5]" />
         <Output Type="FaxBusiness" Passes="0" Value="[TelephoneNumber6]" />
         <Output Type="PhoneOther" Passes="0" Value="[TelephoneNumber4]" />
-        <Output Type="ContactUrl" Passes="0" Value="eway://Contacts/[ItemGUID]" />
+        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Contacts&id=[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
@@ -271,7 +271,7 @@
         <Output Type="PhoneBusiness2" Passes="0" Value="[TelephoneNumber5]" />
         <Output Type="FaxBusiness" Passes="0" Value="[TelephoneNumber6]" />
         <Output Type="PhoneOther" Passes="0" Value="[TelephoneNumber4]" />
-        <Output Type="ContactUrl" Passes="0" Value="eway://Contacts/[ItemGUID]" />
+        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Contacts&id=[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
@@ -321,7 +321,7 @@
         <Output Type="PhoneBusiness2" Passes="0" Value="[TelephoneNumber5]" />
         <Output Type="FaxBusiness" Passes="0" Value="[TelephoneNumber6]" />
         <Output Type="PhoneOther" Passes="0" Value="[TelephoneNumber4]" />
-        <Output Type="ContactUrl" Passes="0" Value="eway://Contacts/[ItemGUID]" />
+        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Contacts&id=[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Type="REST">
@@ -351,7 +351,7 @@
         <Output Type="PhoneBusiness" Passes="0" Value="[Phone]" />
         <Output Type="PhoneMobile" Passes="0" Value="[Mobile]" />
         <Output Type="Email" Passes="0" Value="[Email]" />
-        <Output Type="ContactUrl" Passes="0" Value="eway://Companies/[ItemGUID]" />
+        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Companies&id=[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Type="REST">
@@ -381,7 +381,7 @@
         <Output Type="PhoneBusiness" Passes="0" Value="[Phone]" />
         <Output Type="PhoneMobile" Passes="0" Value="[Mobile]" />
         <Output Type="Email" Passes="0" Value="[Email]" />
-        <Output Type="ContactUrl" Passes="0" Value="eway://Companies/[ItemGUID]" />
+        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Companies&id=[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Type="REST">
@@ -411,7 +411,7 @@
         <Output Type="CompanyName" Passes="0" Value="[Customer]" />
         <Output Type="PhoneMobile" Passes="0" Value="[Phone]" />
         <Output Type="Email" Passes="0" Value="[Email]" />
-        <Output Type="ContactUrl" Passes="0" Value="eway://Leads/[ItemGUID]" />
+        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Leads&id=[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
@@ -445,7 +445,7 @@
         <Output Type="PhoneMobile" Passes="0" Value="[MobilePhoneNumberNormalized]" />
         <Output Type="Email" Passes="0" Value="[Email1Address]" />
         <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
-        <Output Type="ContactUrl" Passes="0" Value="eway://Users/[ItemGUID]" />
+        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Users&id=[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
@@ -479,7 +479,7 @@
         <Output Type="PhoneMobile" Passes="0" Value="[MobilePhoneNumberNormalized]" />
         <Output Type="Email" Passes="0" Value="[Email1Address]" />
         <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
-        <Output Type="ContactUrl" Passes="0" Value="eway://Users/[ItemGUID]" />
+        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Users&id=[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="ReportCall" Type="REST">
