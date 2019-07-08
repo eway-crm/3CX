@@ -484,6 +484,9 @@
     </Scenario>
     <Scenario Id="ReportCall" Type="REST">
       <Request SkipIf="[ReportCallEnabled]!=True" Url="[URL]/WcfService/Service.svc/SearchUsers" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;BusinessPhoneNumberNormalized&quot;: ^^[Agent]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Rules>
+        <Rule Type="Any">Data</Rule>
+      </Rules>
       <Variables>
         <Variable Name="UserGUID" Path="Data.ItemGUID">
           <Filter />
