@@ -4,7 +4,7 @@
   <Connection MaxConcurrentRequests="2" />
   <Parameters>
     <Parameter Name="UserName" Type="String" Editor="String" Title="Username" />
-    <Parameter Name="PasswordHash" Type="Password" Editor="String" Title="Password hash" />
+    <Parameter Name="PasswordHash" Type="Password" Editor="String" Title="Password Hash" />
     <Parameter Name="URL" Type="String" Editor="String" Title="Web Service Address" />
     <Parameter Name="ReportCallEnabled" Type="Boolean" Editor="String" Title="Enable Call Journaling" />
   </Parameters>
