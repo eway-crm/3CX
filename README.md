@@ -8,7 +8,7 @@ Download [latest version](https://raw.githubusercontent.com/eway-crm/3CX/master/
 Go to your 3CX Console > Settings > CRM Integration > Server side tab > and click Add to upload the eWay-CRM template to 3CX.
 
 After the template is added fill in the Username of the eWay-CRM API user that has access to view Contacts / Companies / Deals.
-In the Password hash insert MD5 encrypted password of the user.
+In the Password hash insert [MD5 encrypted password](https://www.eway-crm.com/md5/) of the user.
 Web Service Address is URL address of the eWay-CRM Web Service.
 You can also enable / disable automatic creation of the call journals in eWay-CRM.
 
