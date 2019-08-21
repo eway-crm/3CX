@@ -7,6 +7,7 @@
     <Parameter Name="PasswordHash" Type="Password" Editor="String" Title="Password Hash" />
     <Parameter Name="URL" Type="String" Editor="String" Title="Web Service Address" />
     <Parameter Name="ReportCallEnabled" Type="Boolean" Editor="String" Title="Enable Call Journaling" />
+    <Parameter Name="JournalTypeName" Type="String" Editor="String" Title="Journal Type Name" Default="Call" />
   </Parameters>
   <Authentication Type="Scenario">
     <Value>Login</Value>
@@ -511,7 +512,7 @@
       <Outputs AllowEmpty="false" />
     </Scenario>
     <Scenario Id="GetJournalType" Type="REST">
-      <Request SkipIf="" Url="[URL]/WcfService/Service.svc/SearchEnumValues" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;EnumTypeName&quot;: &quot;JournalType&quot;, &quot;En&quot;: &quot;Call&quot; } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="" Url="[URL]/WcfService/Service.svc/SearchEnumValues" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;EnumTypeName&quot;: &quot;JournalType&quot;, &quot;En&quot;: ^^[JournalTypeName]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
