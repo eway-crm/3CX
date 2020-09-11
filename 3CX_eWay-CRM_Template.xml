@@ -1,20 +1,73 @@
 <?xml version="1.0"?>
-<Crm xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Country="US" Name="eWayCRM" Version="2">
+<Crm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Country="US" Name="eWayCRM" Version="2">
   <Number Prefix="AsIs" MaxLength="256" />
   <Connection MaxConcurrentRequests="2" />
   <Parameters>
-    <Parameter Name="UserName" Type="String" Editor="String" Title="Username" />
-    <Parameter Name="PasswordHash" Type="Password" Editor="String" Title="Password Hash" />
     <Parameter Name="URL" Type="String" Editor="String" Title="Web Service Address" />
+    <Parameter Name="UserName" Type="String" Editor="String" Title="Username" />
+    <Parameter Name="ClientId" Type="String" Editor="String" Title="Client ID:" />
+    <Parameter Name="ClientSecret" Type="String" Editor="String" Title="Client Secret:" />
+    <Parameter Name="RefreshToken" Type="OAuth" Editor="String" Title="Refresh Token:" RequestUrl="[URL]/auth/connect/authorize" RequestUrlParameters="response_type=code&amp;client_id=[ClientId]&amp;scope=api offline_access&amp;redirect_uri=[RedirectUri]&amp;state=[State]" ResponseScenario="OAuthGetAccessToken" />
     <Parameter Name="ReportCallEnabled" Type="Boolean" Editor="String" Title="Enable Call Journaling" />
     <Parameter Name="JournalTypeName" Type="String" Editor="String" Title="Journal Type Name" Default="Call" />
   </Parameters>
   <Authentication Type="Scenario">
-    <Value>Login</Value>
+    <Value>Auth</Value>
   </Authentication>
   <Scenarios>
+    <Scenario Id="Auth" Type="REST">
+      <Request Url="[URL]/auth/connect/token" MessagePasses="0" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json">
+        <PostValues>
+          <Value Key="refresh_token" Passes="0" Type="String">[RefreshToken]</Value>
+          <Value Key="grant_type" Passes="0" Type="String">refresh_token</Value>
+          <Value Key="client_id" Passes="0" Type="String">[ClientId]</Value>
+          <Value Key="client_secret" Passes="0" Type="String">[ClientSecret]</Value>
+        </PostValues>
+      </Request>
+      <Rules>
+        <Rule Type="Any">access_token</Rule>
+      </Rules>
+      <Variables>
+        <Variable Name="AccessToken" Path="access_token">
+          <Filter />
+        </Variable>
+        <Variable Name="ApiDomain" Path="api_domain">
+          <Filter />
+        </Variable>
+      </Variables>
+      <Outputs Next="Login" AllowEmpty="false">
+        <Output Type="HeaderName" Passes="0" Value="Authorization" />
+        <Output Type="HeaderValue" Passes="0" Value="Bearer [AccessToken]" />
+      </Outputs>
+    </Scenario>
+    <Scenario Id="OAuthGetAccessToken" Type="REST">
+      <Request Url="[URL]/auth/connect/token" MessagePasses="0" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json">
+        <PostValues>
+          <Value Key="code" Passes="0" Type="String">[code]</Value>
+          <Value Key="grant_type" Passes="0" Type="String">authorization_code</Value>
+          <Value Key="client_id" Passes="0" Type="String">[ClientId]</Value>
+          <Value Key="client_secret" Passes="0" Type="String">[ClientSecret]</Value>
+          <Value Key="scope" Passes="0" Type="String">api offline_access</Value>
+          <Value Key="redirect_uri" Passes="0" Type="String">[RedirectUri]</Value>
+          <Value Key="state" Passes="0" Type="String">[state]</Value>
+        </PostValues>
+      </Request>
+      <Rules>
+        <Rule Type="Any">refresh_token</Rule>
+      </Rules>
+      <Variables>
+        <Variable Name="Result">refresh_token<Filter /></Variable>
+      </Variables>
+      <Outputs AllowEmpty="false">
+        <Output Type="Result" Passes="0" Value="[Result]" />
+      </Outputs>
+    </Scenario>
     <Scenario Id="Login" Type="REST">
-      <Request Url="[URL]/WcfService/Service.svc/Login" MessagePasses="0" Message="{ &quot;userName&quot;: ^^[UserName]^^, &quot;passwordHash&quot;: ^^[PasswordHash]^^, &quot;appVersion&quot;: &quot;CRM_Lookup_3CX_1.0&quot;, &quot;clientMachineIdentifier&quot;: &quot;0768601D-2E26-4275-946F-7D2D900B806E&quot; }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request Url="[URL]/API.svc/Login" MessagePasses="0" Message="{ &quot;userName&quot;: ^^[UserName]^^, &quot;appVersion&quot;: &quot;CRM_Lookup_3CX_1.0&quot;, &quot;clientMachineIdentifier&quot;: &quot;0768601D-2E26-4275-946F-7D2D900B806E&quot; }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json">
+        <Headers>
+          <Value Key="Authorization" Passes="0" Type="String">Bearer [AccessToken]</Value>
+        </Headers>
+      </Request>
       <Rules>
         <Rule Type="Any" Ethalon="">SessionId</Rule>
       </Rules>
@@ -26,7 +79,7 @@
       <Outputs Next="" AllowEmpty="false" />
     </Scenario>
     <Scenario Id="" Type="REST">
-      <Request SkipIf="" Url="[URL]/WcfService/Service.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber1Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="" Url="[URL]/API.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber1Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -77,7 +130,7 @@
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber2Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/API.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber2Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -128,7 +181,7 @@
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber3Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/API.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber3Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -179,7 +232,7 @@
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber4Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/API.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber4Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -230,7 +283,7 @@
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber5Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/API.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber5Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -281,7 +334,7 @@
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber6Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/API.svc/SearchContacts" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;TelephoneNumber6Normalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -332,7 +385,7 @@
       </Outputs>
     </Scenario>
     <Scenario Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchCompanies" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;PhoneNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/API.svc/SearchCompanies" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;PhoneNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -363,7 +416,7 @@
       </Outputs>
     </Scenario>
     <Scenario Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchCompanies" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;MobileNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/API.svc/SearchCompanies" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;MobileNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -394,7 +447,7 @@
       </Outputs>
     </Scenario>
     <Scenario Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchLeads" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;PhoneNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/API.svc/SearchLeads" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;PhoneNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -425,7 +478,7 @@
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchUsers" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;MobilePhoneNumberNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/API.svc/SearchUsers" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;MobilePhoneNumberNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -460,7 +513,7 @@
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/WcfService/Service.svc/SearchUsers" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;BusinessPhoneNumberNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/API.svc/SearchUsers" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;BusinessPhoneNumberNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -495,7 +548,7 @@
       </Outputs>
     </Scenario>
     <Scenario Id="ReportCall" Type="REST">
-      <Request SkipIf="[ReportCallEnabled]!=True" Url="[URL]/WcfService/Service.svc/SearchUsers" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;BusinessPhoneNumberNormalized&quot;: ^^[Agent]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[ReportCallEnabled]!=True" Url="[URL]/API.svc/SearchUsers" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;BusinessPhoneNumberNormalized&quot;: ^^[Agent]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -507,12 +560,12 @@
       <Outputs Next="GetJournalType" AllowEmpty="false" />
     </Scenario>
     <Scenario Id="CreateCall" Type="REST">
-      <Request SkipIf="" Url="[URL]/WcfService/Service.svc/SaveJournal" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;Phone&quot;: ^^[Number]^^, &quot;FileAs&quot;: ^^[CallType] call^^, &quot;IsSystem&quot;: 1, &quot;EventStart&quot;: ^^[[CallStartTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;EventEnd&quot;: ^^[[CallEndTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;OwnerGUID&quot;: ^^[UserGUID]^^, &quot;TypeEn&quot;: ^^[JournalTypeGUID]^^, &quot;Companies_CompanyGuid&quot;: ^^[Contact::ItemGUID]^^, &quot;Contacts_ContactGuid&quot;: ^^[Contact::ItemGUID]^^, &quot;Leads_SuperiorItemGuid&quot;: ^^[Contact::ItemGUID]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="" Url="[URL]/API.svc/SaveJournal" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;Phone&quot;: ^^[Number]^^, &quot;FileAs&quot;: ^^[CallType] call^^, &quot;IsSystem&quot;: 1, &quot;EventStart&quot;: ^^[[CallStartTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;EventEnd&quot;: ^^[[CallEndTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;OwnerGUID&quot;: ^^[UserGUID]^^, &quot;TypeEn&quot;: ^^[JournalTypeGUID]^^, &quot;Companies_CompanyGuid&quot;: ^^[Contact::ItemGUID]^^, &quot;Contacts_ContactGuid&quot;: ^^[Contact::ItemGUID]^^, &quot;Leads_SuperiorItemGuid&quot;: ^^[Contact::ItemGUID]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Variables />
       <Outputs AllowEmpty="false" />
     </Scenario>
     <Scenario Id="GetJournalType" Type="REST">
-      <Request SkipIf="" Url="[URL]/WcfService/Service.svc/SearchEnumValues" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;EnumTypeName&quot;: &quot;JournalType&quot;, &quot;En&quot;: ^^[JournalTypeName]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="" Url="[URL]/API.svc/SearchEnumValues" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;EnumTypeName&quot;: &quot;JournalType&quot;, &quot;En&quot;: ^^[JournalTypeName]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
