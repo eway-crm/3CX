@@ -13,7 +13,7 @@ Ask eWay-CRM support to provide you Client ID and Client Secret.
 Click Authorize to get Refresh Token. You have to login as the user which is defined in the Username field.
 You can also enable / disable automatic creation of the call journals in eWay-CRM.
 
-![3CX template settings](Images/3CX_template_settings.png)
+![3CX template settings](Images/3CX_template_oauth_settings.png)
 
 ## Installation of the Template (eWay-CRM 6.0 and older)
 
