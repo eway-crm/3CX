@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<Crm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Country="US" Name="eWayCRM" Version="4">
-  <Number Prefix="AsIs" MaxLength="256" />
+<Crm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Country="US" Name="eWayCRM" Version="5">
+  <Number Prefix="Zeros" MaxLength="256" />
   <Connection MaxConcurrentRequests="2" />
   <Parameters>
     <Parameter Name="URL" Type="String" Editor="String" Title="Web Service Address" />
