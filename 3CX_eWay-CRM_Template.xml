@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Crm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Country="US" Name="eWayCRM" Version="5">
+<Crm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Country="US" Name="eWayCRM" Version="6" SupportsEmojis="false">
   <Number Prefix="Zeros" MaxLength="256" />
   <Connection MaxConcurrentRequests="2" />
   <Parameters>
@@ -127,6 +127,7 @@
         <Output Type="PhoneOther" Passes="0" Value="[TelephoneNumber4]" />
         <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Contacts&amp;id=[ItemGUID]" />
         <Output Type="ItemGUID" Passes="0" Value="[ItemGUID]" />
+        <Output Type="EntityId" Passes="0" Value="[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Type="REST">
@@ -158,6 +159,7 @@
         <Output Type="Email" Passes="0" Value="[Email]" />
         <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Companies&amp;id=[ItemGUID]" />
         <Output Type="ItemGUID" Passes="0" Value="[ItemGUID]" />
+        <Output Type="EntityId" Passes="0" Value="[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Type="REST">
@@ -189,6 +191,7 @@
         <Output Type="Email" Passes="0" Value="[Email]" />
         <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Leads&amp;id=[ItemGUID]" />
         <Output Type="ItemGUID" Passes="0" Value="[ItemGUID]" />
+        <Output Type="EntityId" Passes="0" Value="[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
@@ -224,6 +227,7 @@
         <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
         <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Users&amp;id=[ItemGUID]" />
         <Output Type="ItemGUID" Passes="0" Value="[ItemGUID]" />
+        <Output Type="EntityId" Passes="0" Value="[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="" Type="REST">
@@ -259,6 +263,7 @@
         <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
         <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Users&amp;id=[ItemGUID]" />
         <Output Type="ItemGUID" Passes="0" Value="[ItemGUID]" />
+        <Output Type="EntityId" Passes="0" Value="[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="ReportCall" Type="REST">
@@ -274,7 +279,7 @@
       <Outputs Next="GetJournalType" AllowEmpty="false" />
     </Scenario>
     <Scenario Id="CreateCall" Type="REST">
-      <Request SkipIf="" Url="[URL]/API.svc/SaveJournal" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;Phone&quot;: ^^[Number]^^, &quot;FileAs&quot;: ^^[CallType] call^^, &quot;IsSystem&quot;: 1, &quot;EventStart&quot;: ^^[[CallStartTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;EventEnd&quot;: ^^[[CallEndTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;OwnerGUID&quot;: ^^[UserGUID]^^, &quot;TypeEn&quot;: ^^[JournalTypeGUID]^^, &quot;Companies_CompanyGuid&quot;: ^^[Contact::ItemGUID]^^, &quot;Contacts_ContactGuid&quot;: ^^[Contact::ItemGUID]^^, &quot;Leads_SuperiorItemGuid&quot;: ^^[Contact::ItemGUID]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="" Url="[URL]/API.svc/SaveJournal" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;Phone&quot;: ^^[Number]^^, &quot;FileAs&quot;: ^^[CallType] call^^, &quot;IsSystem&quot;: 1, &quot;EventStart&quot;: ^^[[CallStartTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;EventEnd&quot;: ^^[[CallEndTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;OwnerGUID&quot;: ^^[UserGUID]^^, &quot;TypeEn&quot;: ^^[JournalTypeGUID]^^, &quot;Companies_CompanyGuid&quot;: ^^[EntityId]^^, &quot;Contacts_ContactGuid&quot;: ^^[EntityId]^^, &quot;Leads_SuperiorItemGuid&quot;: ^^[EntityId]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Variables />
       <Outputs AllowEmpty="false" />
     </Scenario>
