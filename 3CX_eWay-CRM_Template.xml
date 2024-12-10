@@ -3,13 +3,13 @@
   <Number Prefix="Zeros" MaxLength="256" />
   <Connection MaxConcurrentRequests="2" />
   <Parameters>
-    <Parameter Name="URL" Type="String" Editor="String" Title="Web Service Address" />
-    <Parameter Name="UserName" Type="String" Editor="String" Title="Username" />
-    <Parameter Name="ClientId" Type="String" Editor="String" Title="Client ID" />
-    <Parameter Name="ClientSecret" Type="String" Editor="String" Title="Client Secret" />
-    <Parameter Name="RefreshToken" Type="OAuth" Editor="String" Title="Refresh Token" RequestUrl="[URL]/auth/connect/authorize" RequestUrlParameters="response_type=code&amp;client_id=[ClientId]&amp;scope=api offline_access&amp;redirect_uri=[RedirectUri]&amp;state=[State]" ResponseScenario="OAuthGetAccessToken" />
-    <Parameter Name="ReportCallEnabled" Type="Boolean" Editor="String" Title="Enable Call Journaling" />
-    <Parameter Name="JournalTypeName" Type="String" Editor="String" Title="Journal Type Name" Default="Call" />
+    <Parameter Name="URL" Type="String" Parent="General Configuration" Editor="String" Title="Web Service Address" />
+    <Parameter Name="UserName" Type="String" Parent="General Configuration" Editor="String" Title="Username" />
+    <Parameter Name="ClientId" Type="String" Parent="General Configuration" Editor="String" Title="Client ID" />
+    <Parameter Name="ClientSecret" Type="String" Parent="General Configuration" Editor="String" Title="Client Secret" />
+    <Parameter Name="RefreshToken" Type="OAuth" Parent="General Configuration" Editor="String" Title="Refresh Token" RequestUrl="[URL]/auth/connect/authorize" RequestUrlParameters="response_type=code&amp;client_id=[ClientId]&amp;scope=api offline_access&amp;redirect_uri=[RedirectUri]&amp;state=[State]" ResponseScenario="OAuthGetAccessToken" />
+    <Parameter Name="ReportCallEnabled" Type="Boolean" Parent="General Configuration" Editor="String" Title="Enable Call Journaling" />
+    <Parameter Name="JournalTypeName" Type="String" Parent="General Configuration" Editor="String" Title="Journal Type Name" Default="Call" />
   </Parameters>
   <Authentication Type="Scenario">
     <Value>Auth</Value>
