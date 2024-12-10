@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Crm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Country="US" Name="eWayCRM" Version="6" SupportsEmojis="false">
+<Crm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Country="US" Name="eWayCRM" Version="7" SupportsEmojis="false">
   <Number Prefix="Zeros" MaxLength="256" />
   <Connection MaxConcurrentRequests="2" />
   <Parameters>
