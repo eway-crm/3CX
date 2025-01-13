@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Crm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Country="US" Name="eWayCRM" Version="7" SupportsEmojis="false">
+<Crm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Country="US" Name="eWayCRM" Version="8" SupportsEmojis="false">
   <Number Prefix="Zeros" MaxLength="256" />
   <Connection MaxConcurrentRequests="2" />
   <Parameters>
@@ -126,7 +126,7 @@
         <Output Type="FaxBusiness" Passes="0" Value="[TelephoneNumber6]" />
         <Output Type="PhoneOther" Passes="0" Value="[TelephoneNumber4]" />
         <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Contacts&amp;id=[ItemGUID]" />
-        <Output Type="ItemGUID" Passes="0" Value="[ItemGUID]" />
+        <Output Type="EntityType" Passes="0" Value="Contacts" />
         <Output Type="EntityId" Passes="0" Value="[ItemGUID]" />
       </Outputs>
     </Scenario>
@@ -158,7 +158,7 @@
         <Output Type="PhoneMobile" Passes="0" Value="[Mobile]" />
         <Output Type="Email" Passes="0" Value="[Email]" />
         <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Companies&amp;id=[ItemGUID]" />
-        <Output Type="ItemGUID" Passes="0" Value="[ItemGUID]" />
+        <Output Type="EntityType" Passes="0" Value="Companies" />
         <Output Type="EntityId" Passes="0" Value="[ItemGUID]" />
       </Outputs>
     </Scenario>
@@ -190,7 +190,7 @@
         <Output Type="PhoneMobile" Passes="0" Value="[Phone]" />
         <Output Type="Email" Passes="0" Value="[Email]" />
         <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Leads&amp;id=[ItemGUID]" />
-        <Output Type="ItemGUID" Passes="0" Value="[ItemGUID]" />
+        <Output Type="EntityType" Passes="0" Value="Leads" />
         <Output Type="EntityId" Passes="0" Value="[ItemGUID]" />
       </Outputs>
     </Scenario>
@@ -226,48 +226,12 @@
         <Output Type="Email" Passes="0" Value="[Email1Address]" />
         <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
         <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Users&amp;id=[ItemGUID]" />
-        <Output Type="ItemGUID" Passes="0" Value="[ItemGUID]" />
-        <Output Type="EntityId" Passes="0" Value="[ItemGUID]" />
-      </Outputs>
-    </Scenario>
-    <Scenario Id="" Type="REST">
-      <Request SkipIf="[IIf([FoundRecordCount] &gt; 0, True, False)]" Url="[URL]/API.svc/SearchUsers" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;BusinessPhoneNumberNormalized&quot;: ^^[Number]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
-      <Rules>
-        <Rule Type="Any">Data</Rule>
-      </Rules>
-      <Variables>
-        <Variable Name="FirstName" LookupValue="" Path="Data.FirstName">
-          <Filter />
-        </Variable>
-        <Variable Name="LastName" Path="Data.LastName">
-          <Filter />
-        </Variable>
-        <Variable Name="MobilePhoneNumberNormalized" Path="Data.MobilePhoneNumberNormalized">
-          <Filter />
-        </Variable>
-        <Variable Name="Email1Address" Path="Data.Email1Address">
-          <Filter />
-        </Variable>
-        <Variable Name="BusinessPhoneNumber" Path="Data.BusinessPhoneNumber">
-          <Filter />
-        </Variable>
-        <Variable Name="ItemGUID" Path="Data.ItemGUID">
-          <Filter />
-        </Variable>
-      </Variables>
-      <Outputs AllowEmpty="false">
-        <Output Type="FirstName" Passes="0" Value="[FirstName]" />
-        <Output Type="LastName" Passes="0" Value="[LastName]" />
-        <Output Type="PhoneMobile" Passes="0" Value="[MobilePhoneNumberNormalized]" />
-        <Output Type="Email" Passes="0" Value="[Email1Address]" />
-        <Output Type="PhoneBusiness" Passes="0" Value="[BusinessPhoneNumber]" />
-        <Output Type="ContactUrl" Passes="0" Value="[URL]/WA/Item.aspx?module=Users&amp;id=[ItemGUID]" />
-        <Output Type="ItemGUID" Passes="0" Value="[ItemGUID]" />
+        <Output Type="EntityType" Passes="0" Value="Users" />
         <Output Type="EntityId" Passes="0" Value="[ItemGUID]" />
       </Outputs>
     </Scenario>
     <Scenario Id="ReportCall" Type="REST">
-      <Request SkipIf="[ReportCallEnabled]!=True" Url="[URL]/API.svc/SearchUsers" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;BusinessPhoneNumberNormalized&quot;: ^^[Agent]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[ReportCallEnabled]!=True||[EntityId]==&quot;&quot;" Url="[URL]/API.svc/SearchUsers" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;BusinessPhoneNumberNormalized&quot;: ^^[Agent]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
@@ -279,12 +243,12 @@
       <Outputs Next="GetJournalType" AllowEmpty="false" />
     </Scenario>
     <Scenario Id="CreateCall" Type="REST">
-      <Request SkipIf="" Url="[URL]/API.svc/SaveJournal" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;Phone&quot;: ^^[Number]^^, &quot;FileAs&quot;: ^^[CallType] call^^, &quot;IsSystem&quot;: 1, &quot;EventStart&quot;: ^^[[CallStartTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;EventEnd&quot;: ^^[[CallEndTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;OwnerGUID&quot;: ^^[UserGUID]^^, &quot;TypeEn&quot;: ^^[JournalTypeGUID]^^, &quot;Companies_CompanyGuid&quot;: ^^[EntityId]^^, &quot;Contacts_ContactGuid&quot;: ^^[EntityId]^^, &quot;Leads_SuperiorItemGuid&quot;: ^^[EntityId]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[JournalTypeGUID]==&quot;&quot;" Url="[URL]/API.svc/SaveJournal" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;Phone&quot;: ^^[Number]^^, &quot;FileAs&quot;: ^^[CallType] call^^, &quot;IsSystem&quot;: 1, &quot;EventStart&quot;: ^^[[CallStartTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;EventEnd&quot;: ^^[[CallEndTimeLocal].ToString(&quot;yyyy-MM-dd HH:mm:ssZ&quot;)]^^, &quot;OwnerGUID&quot;: ^^[UserGUID]^^, &quot;TypeEn&quot;: ^^[JournalTypeGUID]^^, &quot;Companies_CompanyGuid&quot;: ^^[EntityId]^^, &quot;Contacts_ContactGuid&quot;: ^^[EntityId]^^, &quot;Leads_SuperiorItemGuid&quot;: ^^[EntityId]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Variables />
       <Outputs AllowEmpty="false" />
     </Scenario>
     <Scenario Id="GetJournalType" Type="REST">
-      <Request SkipIf="" Url="[URL]/API.svc/SearchEnumValues" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;EnumTypeName&quot;: &quot;JournalType&quot;, &quot;En&quot;: ^^[JournalTypeName]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
+      <Request SkipIf="[UserGUID]==&quot;&quot;" Url="[URL]/API.svc/SearchEnumValues" MessagePasses="0" Message="{ &quot;sessionId&quot;: ^^[SID]^^, &quot;transmitObject&quot;: { &quot;EnumTypeName&quot;: &quot;JournalType&quot;, &quot;En&quot;: ^^[JournalTypeName]^^ } }" RequestContentType="application/json" RequestEncoding="UrlEncoded" RequestType="Post" ResponseType="Json" />
       <Rules>
         <Rule Type="Any">Data</Rule>
       </Rules>
